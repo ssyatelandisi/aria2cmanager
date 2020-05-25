@@ -7,15 +7,14 @@
 void createFolder(char *folderName)
 {
     // 文件夹不存在则创建文件夹
-    if (_access(folderName, 0) == -1)
+    if (access(folderName, 0) == -1)
     {
-        _mkdir(folderName);
+        mkdir(folderName);
     }
 }
 char *getLink()
 {
     static char link[2048];
-    printf("提示：可以先复制下载地址，然后在这里右键粘贴\n\n");
     printf("输入下载地址，按Enter开始下载\n> ");
     gets(link);
     return link;
@@ -37,35 +36,26 @@ char *formatLink(char *input)
 }
 char *mergeCommand(char *input)
 {
-    char aria2c[] = "aria2c -s16 -x16 -c --dir=下载 -U \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36\" ";
+    char aria2c[] = "aria2c -s16 -x16 -c --dir=Download -U \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36\" ";
     static char output[4096];
     strcat(output, aria2c);
-    // strcat(output, "'");
+    strcat(output, "\"");
     strcat(output, input);
-    // strcat(output, "'");
-    printf("%s", output);
+    strcat(output, "\"");
     return output;
 }
 int download(char *input)
 {
     int i;
-    createFolder("下载");
+    createFolder("Download");
     i = system(input);
-    printf("%d", i);
     return i;
 }
-int main(int argc, char *argv[])
+int start()
 {
     char link[2048], input[2048], command[4096];
     /*获取下载地址*/
-    if (argc > 1)
-    {
-        strcpy(input, argv[1]);
-    }
-    else
-    {
-        strcpy(input, getLink());
-    }
+    strcpy(input, getLink());
     /*格式化地址*/
     // strcpy(link, input);
     strcpy(link, formatLink(input));
@@ -81,9 +71,16 @@ int main(int argc, char *argv[])
     {
         printf("\n\n==========下载失败==========\n\n");
     }
+    return 0;
+}
+int main()
+{
+    SetConsoleOutputCP(65001); //解决UTF8中文乱码
+    printf("提示：可以先复制下载地址，然后在这里右键粘贴\n\n");
+    start();
     while (1)
     {
-        sleep(3600000);
+        sleep(36000000);
     }
     return 0;
 }
