@@ -75,7 +75,7 @@ int start()
 }
 int main()
 {
-    SetConsoleOutputCP(65001); //解决UTF8中文乱码
+    // SetConsoleOutputCP(65001); //解决UTF8中文乱码
     printf("提示：可以先复制下载地址，然后在这里右键粘贴\n\n");
     start();
     while (1)
