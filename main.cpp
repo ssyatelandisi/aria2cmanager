@@ -56,12 +56,15 @@ public:
     void get_bt_tracker()
     {
         remove("trackers.txt");
-        string commad = "aria2c --out=trackers.txt https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_best.txt";
+        string commad = "aria2c --out=trackers.txt https://trackerslist.com/all_aria2.txt";
         system(commad.c_str());
         ifstream inFile("trackers.txt", ios::in);
         ofstream outFile(CONF, ios::out);
         outFile << "max-upload-limit=16K\nbt-tracker=";
-        char data[256];
+        string data;
+        inFile >> data;
+        outFile << data;
+        /*         char data[256];
         int index = 0;
         while (inFile.getline(data, 256))
         {
@@ -74,7 +77,7 @@ public:
                     outFile << stream;
                 index++;
             }
-        }
+        } */
         inFile.close();
         outFile.close();
         remove("trackers.txt");
@@ -116,8 +119,8 @@ int main(int argc, char const *argv[])
     }
     create_floder("Downloads"); //创建Downloads文件夹
     aria2c_manager.run();
-    cout << "按ESC退出" << std::endl;
-    remove(CONF);
+    cout << "下载结束" << endl;
+    cout << "按ESC退出" << endl;
     cin.sync();
     char c;
     while (c = getch())
